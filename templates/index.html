@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Index</title>
+
+    <style>
+        #Excluir>button{
+            background-color: #f1f1f1;
+            border: none;
+            transition: 0.3s;
+        }
+        #Excluir>button:hover{
+            background-color: #d0d0d0;
+            border: 1px solid red;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!--<img src="{{ url_for('static', filename='./img.png') }}" style="width: 100%;height: 100%;"> -->    
+    <!--<img src="./static/img.png" style="width: 100%;height: 100%;">  necessário definir em uma pasta como static os arquivos de imagem -->
+
+    <h1>Adicionar nova tarefa</h1>
+    <form action="/create" method="POST">
+        <input type="text" name="description" placeholder="Descrição" required>
+        <button type="submit"> Enviar </button>
+    </form>
+
+    <h2>Tarefas</h2>
+    <ul>
+        {% for task in tasks %}
+            <li  style="display: block"> 
+                <p style="display: inline-block;" id="task{{task.id}}">{{task.description}}</p>
+                
+                <form id="Editar{{task.id}}" action="/update/{{ task.id }}" method="POST" style="display: none;" >
+                    <input type="text" name="description" value="{{task.description}}"/>
+                    <button type="submit" > Enviar </button>
+                 </form>
+
+                 <button type="button" id="btnEditar{{task.id}}" onclick="showForm( {{ task.id }} )"> {% include 'svg/lapis.svg' %} </button>
+
+                <form id="Excluir" action="/delete/{{ task.id }}" method="POST" style="display: inline;">
+                    <button type="submit" style="color: red;"> X </button>
+                </form> 
+            </li>
+        {% endfor %}
+
+    </ul>
+
+
+    <script>
+        function showForm(int) {
+            document.getElementById('Editar'+int).style.display = "inline";
+            document.getElementById('task'+int).style.display = "none";
+            document.getElementById('btnEditar'+int).style.display = "none";
+
+        }
+    </script>
+</body>
+</html>
